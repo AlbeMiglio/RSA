@@ -1,0 +1,455 @@
+\documentclass[a4paper,12pt]{article}
+%usepackage[a4paper,top=2.5cm,bottom=3cm,left=2.5cm,right=2.5cm,bindingoffset=0mm]{geometry}
+\usepackage{graphicx,amsmath,amscd,amssymb,verbatim}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+\usepackage{indentfirst}
+\usepackage{lipsum}
+\usepackage{tipa}
+\usepackage{kantlipsum}
+\usepackage{textgreek}
+\parindent=20pt
+\usepackage{makeidx}
+\frenchspacing
+\newtheorem{theorem}{Teorema}[section]
+\newtheorem{remark}{Remark}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{esercizio}{Esercizio}[section]
+\newenvironment{proof}[1][Dimostrazione]{\textbf{#1.} }{\ \rule{0.5em}{0.5em}\medskip\medskip}
+\newenvironment{sistema}%
+{\left\lbrace\begin{array}{@{}l@{}}}%
+{\end{array}\right.}
+\newcommand{\eqnsection}{
+   \renewcommand{\theequation}{{\thesection.\arabic{equation}}}
+   \makeatletter
+   \csname @addtoreset\endcsname{equation}{section}
+   \makeatother}
+\eqnsection
+\makeindex
+\begin{document}
+%\title{Liceo Scientifico Statale ``Archimede'' Messina\\
+%Esami di Stato 2021}
+%\date{}
+%\author{Elaborato dello studente Francesco Santoro - Classe V B\\
+%\\
+%\Large{La teoria del mesone di Yukawa}}
+\title{L'algoritmo RSA}
+\author{Alberto Migliorato}
+\date{31 maggio 2021}
+\maketitle
+\thispagestyle{empty}
+\begin{abstract}
+Al giorno d'oggi la crittografia è ovunque; qualsiasi comunicazione moderna avviene con una qualsiasi forma di sicurezza (crittografica) in più. In questo elaborato si propone una spiegazione, sotto un punto di vista più formale, di uno degli algoritmi più diffusi per la crittografia moderna, l'algoritmo RSA.\\
+La struttura dell'algoritmo RSA è piuttosto semplice dal punto di vista teorico; dal lato pratico, invece, l'algoritmo stesso sfrutta un'operazione matematica molto facile da eseguire direttamente, ma molto difficile da svolgere a ritroso (to \emph{reverse}!). Ad oggi, la potenza di calcolo dei computer moderni non è sufficiente per garantire una capacità computazionale in grado di eseguire l'operazione inversa in tempi utili.
+\end{abstract}
+\newpage
+\tableofcontents
+\newpage
+\section*{Introduzione}
+Esso prende nome dai tre studiosi che lo hanno progettato: Ron \textbf{Rivest}, Adi \textbf{Shamir} e Leonard \textbf{Adleman}. L'algoritmo, pubblicato nel 1977, fu uno dei primi ad implementare un sistema a chiave \textbf{pubblica}.\\
+Nei sistemi di crittografia ``classici'' la chiave utilizzata per la cifratura di un messaggio è la stessa necessaria per decifrare il messaggio stesso. Essa è detta pertanto \textbf{privata} e presenta principalmente due problematiche:
+\begin{enumerate}
+    \item[1.] sia il mittente che il destinatario devono essere a conoscenza della stessa chiave di cifratura/decifratura, che non può essere comunicata direttamente senza il rischio di un'intercettazione;
+    \item[2.] poichè la chiave è univoca, non è possibile verificare l'autenticità del mittente e del messaggio: chiunque ne sia in possesso può decodificare messaggi in ingresso e codificarne altri in uscita.
+\end{enumerate}
+\ \ \ \ L'introduzione di un nuovo sistema \textbf{asimmetrico} portò per la prima volta un'efficace soluzione per entrambe le problematiche. Ciascun ente comunicante infatti possiede una coppia di chiavi, una privata ed una pubblica, generate in maniera tale che un messaggio cifrato con l'una può essere decifrato solo con l'altra e viceversa.\\
+Cifrando pertanto un messaggio con la propria chiave privata e con la chiave pubblica del destinatario, esso potrà essere decifrato unicamente con la propria chiave pubblica e con la chiave privata del destinatario stesso: poichè le chiavi pubbliche sono di pubblico dominio, al contrario delle chiavi private, si avrà la certezza da un lato dell'\textbf{autenticità} del messaggio del mittente e dall'altro della \textbf{riservatezza} del messaggio per il destinatario.\\\\
+Per comprendere a pieno il processo matematico alla base dell'algoritmo stesso, sono necessarie delle basi di \emph{Teoria dei numeri} o \emph{aritmetica}, in particolare nel ramo modulare: di seguito analizzeremo gli elementi utili alla discussione.
+\newpage
+\section{Elementi di aritmetica}
+\subsection{Relazioni}\label{Relazi}
+\noindent Un concetto fondamentale per costruire successivamente l'insieme $\mathbb{Z}_n$ è quello di relazione:
+\begin{quote}
+    \emph{Sia $X$ un insieme. Una relazione su $X$ è una corrispondenza $X\to X$, cioè un sottoinsieme $\mathcal{R}$ di $X\times X$.}
+\end{quote}
+
+ \noindent Se ad esempio si prendesse $X=\{a,b,c\}$, una possibile relazione è l'insieme $\mathcal{R}=\{(a,b),\, (b,b),\,(b,c)\}$. Come notazione alternativa e più diffusa si può scrivere anche $a \to b$, $b \to b$ e $b \to c$.\\
+
+\noindent Il concetto di relazione è piuttosto astratto e non immediatamente scontato; il nome ``relazione'' dovrebbe però aiutare a dare l'intuizione per comprendere a pieno che cosa si intenda per $a \to b$.
+
+\noindent Esistono diversi tipi di relazioni con diverse proprietà: \'e di nostro particolare interesse il caso della relazione di \textbf{equivalenza}.\\
+\\Possiamo definire una relazione di equivalenza come tale se e solo se è:
+\begin{itemize}
+\item \textbf{riflessiva}: $\forall x\in X$ $x \to x$
+\item \textbf{simmetrica}: $\forall x,y\in X$ $x \to y \ \implies \ y \to x$
+\item \textbf{transitiva}: $\forall x,y,z\in X$ $x \to y \land y \to z \ \implies \ x \to z$
+\end{itemize}
+È interessante notare come la relazione ``$=$'' sia una relazione di equivalenza. Infatti:
+\begin{itemize}
+    \item se $x=x$ allora è tautologico che $x=x$;
+    \item analogamente, se $x=y$ segue che $y=x$;
+    \item anche la transitività è immediatamente dimostrabile con estrema facilità: $x=y \land y=z \ \implies \ x = z$
+\end{itemize}
+Come è ben deducibile, molte altre relazioni definite tramite il simbolo $=$ sono di equivalenza.
+
+\subsection{Divisibilità e MCD}
+Prima di introdurre la nozione di massimo comune divisore (MCD), dobbiamo studiare i concetti di divisibilità fra interi, cioè conoscere le caratteristiche e le proprietà delle divisioni fra numeri interi.
+\begin{quote}\label{divisioneIntera}
+\emph{Si dice che \textbf{a divide b} o che b è divisibile per a (e si indica con $a|b$) se esiste uno ed un solo intero quoziente q tale che $b=q \cdot a$.}
+\end{quote}
+In simboli si ha:
+\begin{equation}\label{divisibilita}
+\forall a,b,q \in \mathbb{Z} \mid b=q \cdot a \, \implies \, (a|b)
+\end{equation}
+
+Questa relazione di divisibilità gode di alcune interessanti ma semplici proprietà; infatti, per ogni $a,b,c \in \mathbb{Z}$:
+\begin{itemize}\label{proprietaDiv}
+\item $(1|b) \land (b|b)$ (ciascun numero è divisibile per uno e per se stesso);
+\item se $(a|b) \land (b|c)$, allora $(a|c)$;
+\item se $(a|b) \land b\neq 0$, allora $1 \leq |a| \leq |b|$ (il dividendo è sempre maggiore o uguale al divisore);
+\item se $(a|b) \land (b|a)$, allora $a = \pm b$ (due numeri divisibili tra loro sono uguali in valore assoluto);
+\item se $(a|1)$, allora $a = \pm 1$ (1 è divisibile solo per se stesso e il suo opposto);
+\item se $a \neq 0$, allora $(a|0)$ (0 è divisibile per qualsiasi numero tranne che per se stesso);
+\item se $(a|b) \land (a|(b+c))$, allora $(a|c)$.
+\end{itemize}
+
+Fatte tutte le doverose premesse sulla relazione di divisibilità tra due numeri, possiamo dunque definire il massimo comune divisore, o MCD.\\\\
+Il massimo comune divisore di due numeri interi $a$ e $b$ è il numero naturale più grande per il quale possono essere entrambi divisi.\\
+Per indicare un massimo comune divisore, si usa la dicitura MCD$(a,b)$.\\
+\'E evidente che se due numeri $a$ e $b$ sono entrambi uguali a $0$, allora il loro MCD $=0$.
+
+\subsection{Numeri primi e coprimi}
+\begin{quote}
+    \emph{Dicesi \textbf{primo} un numero divisibile solo per se stesso e per l'unità; i numeri non primi si dicono ``composti''.}
+\end{quote}
+Sappiamo che la serie dei numeri primi è illimitata: ad oggi, tuttavia, non è stata ancora trovata una funzione in grado di rappresentare l'intera serie dei numeri primi. Mersenne provò a definire i numeri primi con una funzione del tipo $n(p) = 2^{p}-1$, dove $p$, però, rappresenta un numero primo.\\\\
+Quello di numero primo è uno dei concetti basilari della teoria dei numeri, la parte della matematica che studia i numeri interi: l'importanza sta nella possibilità di costruire con essi, attraverso la moltiplicazione, tutti gli altri numeri interi, nonché l'unicità di tale fattorizzazione.\\
+Essi sono inoltre oggetto di studio fin dall'antichità: i primi risultati risalgono agli antichi Greci e in particolare agli \emph{Elementi} di Euclide, scritti attorno al 300 a.C. Ciononostante, numerose congetture che li riguardano non sono state ancora dimostrate; tra le più note vi sono l'ipotesi di Riemann, la congettura di Goldbach e quella dei primi gemelli, ancora indimostrate nonostante i numerosi secoli trascorsi dalla loro formulazione.\\\\
+Due numeri interi $a$ e $b$ sono invece detti \textbf{coprimi} (o primi tra loro) se e solo se essi non hanno nessun divisore comune eccetto 1 e -1 o, in modo equivalente, se il loro massimo comune divisore è 1.
+\begin{equation}\label{coprimi}
+\text{ MCD}(a,b)=1 \iff (a,b) \in \mathbb{Z}_{coprimi}
+\end{equation}
+La loro rilevanza è notevole in moltissimi ambiti della matematica pura, come l'algebra o la geometria; recentemente hanno assunto un'importanza cruciale anche nella matematica applicata, e in particolare nella crittografia.\\
+Un metodo molto efficiente per determinare se due numeri sono coprimi è fornito dall'\textbf{algoritmo di Euclide}.
+
+\subsection{Algoritmo di Euclide}
+L'algoritmo di Euclide ha la funzione di trovare l'MCD tra due numeri interi. È uno degli algoritmi più antichi conosciuti, in quanto presente negli \emph{Elementi} euclidei; certamente era conosciuto da Eudosso di Cnido intorno al 375 a.C. e persino Aristotele ne ha fatto cenno ne \emph{I topici}.\\
+L'algoritmo è particolarmente efficiente in quanto non richiede la fattorizzazione dei due numeri, la cui lentezza computazionale cresce con un andamento esponenziale.\\
+Euclide originariamente formulò il problema geometricamente, per trovare una "misura" comune per la lunghezza di due segmenti, e il suo algoritmo procedeva sottraendo ripetutamente il più corto dal più lungo.\\\\
+Partendo da due numeri naturali $a$ e $b$, è detto $r_i$ il resto della divisione (di passo $i$-esimo) $a_i \div b_i$ tale che $a_i=q_1\cdot b_i+r_i$. \\
+Secondo il teorema alla base dell'algoritmo:
+\begin{equation}
+    \text{MCD}(a_i,b_i)= \text{MCD}(b_i,r_i)
+\end{equation}
+iterando il calcolo del resto per ciascun passo, si otterrà con un numero $N$ finito di passi l'ultimo resto $r_N$ non nullo che coinciderà con l'MCD$(a,b)$.\\
+Sappiamo che il numero di passi da compiere è certamente finito poichè il resto di una divisione è sempre strettamente minore del divisore, e pertanto i numeri
+$r_i$,$r_{i+1}$,$r_{i+2}$,... formano una sequenza strettamente decrescente di numeri interi positivi, che deve
+prima o poi raggiungere il valore 0.\\\\
+Scrivendo i due numeri $a$ e $b$ come multipli del loro MCD (che per semplicità chiameremo $d$) e la loro divisione:\\\\
+$\left \{ \begin{array}{rl}
+a=d \cdot k_a
+\\b=d \cdot k_b
+\end{array}
+\right. \Rightarrow r=d \cdot k_a - q (d \cdot k_b) \Rightarrow r = d (k_a - q \cdot k_b);$\\\\
+appare evidente come il resto sia anch'esso multiplo di MCD$(a,b)$. Andando a ritroso nell'algoritmo si nota come per ciascun resto $r_n$ valga la relazione $(r_n|r_{n-1})$. Di fatto ciascun resto $r_n > 0$ è dunque multiplo di MCD$(a,b)$ e poichè l'ultimo resto è il minore di tutti, il minore dei multipli di MCD$(a,b)$ sarà proprio l'MCD stesso.
+\begin{equation}
+    a,b \in \mathbb{Z} \,\implies \, \exists \, N\in \mathbb{Z} \mid r_N = \text{MCD}(a,b)
+\end{equation}
+Tenendo nota dei quozienti ottenuti durante lo svolgimento dell'algoritmo, si possono determinare due interi $p$ e $q$ tali che $ap+bq=\text{MCD}(a,b)$. Questo però è noto con il nome di algoritmo di Euclide esteso, la cui applicazione più interessante consiste nel calcolo dei coefficienti dell'identità di B\'ezout.\\
+
+\subsection{Identità di B\'ezout}
+L'identità (o lemma) di Bézout afferma che se $a$ e $b$ sono interi (e non entrambi nulli) e il loro MCD è $d$, allora:
+\begin{equation}\label{Bezout}
+\exists \, x,y \in \mathbb{Z} \, : ax+by=d
+\end{equation}
+Si dice che $d$ è \textbf{combinazione lineare} intera di $a$ e $b$.\\
+Grazie all'algoritmo di Euclide, siamo in grado di trovare con un numero $n$ finito di passi l'ultimo resto non nullo; esso concede, tuttavia, un'altra serie di informazioni essenziale per l'applicazione pratica dell'identità di B\'ezout.\\
+Poichè conosciamo i quozienti di ciascun passo dell'algoritmo, siamo in grado di ricavare la coppia di coefficienti di ciascuno di questi, con evidente interesse per l'ultima (dove $r_n=d=\text{MCD}(a,b)$).
+\begin{equation} \label{resti}
+\begin{split}
+r_1 & = a - q_1 b \\
+r_2 & = b - q_2 r_1 \\
+r_3 & = r_1 - q_3 r_2 \\
+\hspace{-4em}\vdots \\
+r_n & = r_{n-2} - q_n r_{n-1}
+\end{split}
+\end{equation}
+Ponendo $a=(1,0)$ e $b=(0,1)$ (di fatto esprimendo i loro coefficienti unitari) e sostituendo questi valori nella \eqref{resti} otteniamo che:
+\begin{equation} \label{coefficienti}
+\begin{split}
+r_1 & = (1;\, -q_1) \\
+r_2 & = (-q_2;\, 1+q_1 q_2) \\
+r_3 & = (1+q_2 q_3;\, -q_1 -q_3(1+q_1 q_2)) \\
+r_4 & = (-q_2 -q_4(1+q_2 q_3);\, 1+q_1 q_2 -q_4(-q_1 -q_3(1+q_1 q_2))) \\
+\hspace{-4em}\vdots \\
+& \text{... e così via.}
+\end{split}
+\end{equation}
+Dove ciascuna coppia equivale ai coefficienti della combinazione lineare per ciascun passo. Conoscendo il numero $n$ di passi da compiere per l'algoritmo e i rispettivi quozienti, dunque, è possibile ricavare i coefficienti $(x,y)$ dell'identità di B\'ezout dell'$n$-esimo passo.
+
+\subsection{Funzione di Eulero}
+\'E detta funzione toziente di Eulero, \textbf{indicatore di Gauss} o funzione di Euler-Gauss quella funzione che associa ad ogni $n \in \mathbb{N}\backslash \{0\}$ il numero dei coprimi con $n$ minori di esso.
+\begin{equation}\label{phi}
+\varphi(n)=\bigg|\{k \, |\, 1 \leq k \leq n-1 \, \land \, \text{MCD}(n,k)=1\, \}\bigg|
+\end{equation}
+Per convenzione, $\varphi(1)=1$; rifacendoci alla definizione della funzione, sappiamo che per ogni numero primo $p$:
+\begin{equation}\label{phiP}
+    \varphi(p)=p-1
+\end{equation}
+poichè un numero primo, per definizione, è coprimo con tutti i numeri interi $\in \mathbb{N}$ che lo precedono.\\
+Calcoliamo ora $\varphi(p^\alpha)$, con $p$ numero primo; a tal scopo, osserviamo che i numeri che hanno dei fattori in comune con $p$ devono essere multipli di una sua potenza. Pertanto, di tutti i numeri compresi tra $1$ e $p^\alpha$, solo
+\begin{equation*}
+    p,2p,3p,\hdots,p^{\alpha-1}\cdot p
+\end{equation*}
+non sono coprimi con $p^\alpha$. Quantificandoli, questi ultimi sono in numero di $p^{\alpha-1}$, pertanto sarà certamente:
+\begin{equation}\label{phiPa}
+\varphi(p^\alpha)=p^\alpha-p^{\alpha-1}=p^{\alpha-1}\left(p-1\right)=p^\alpha \left(1-\frac{1}{p}\right)
+\end{equation}
+che, con $\alpha=1$, coincide perfettamente con la \eqref{phiP}.\\\\
+Fatte queste premesse, possiamo dimostrare alcune interessanti proprietà della \emph{phi} di Eulero.\\
+Ad esempio, scopriamo che la \emph{phi} di Eulero è moltiplicativa: per ogni coppia di interi $a$ e $b$ primi tra loro si ha:
+\begin{equation}\label{phiAB}
+\varphi(ab)=\varphi(a)\varphi(b)
+\end{equation}
+Considerando $n=ab$, per trovare i coprimi minori di $n$ occorre sottrarre ad esso i multipli di $a$ e di $b$. I multipli di $a$ minori o uguali ad $n$, cioè $a,2a,3a,\hdots,\dfrac{n}{a}\cdot a$, saranno $\dfrac{n}{a}$; analogamente possiamo quantificare i multipli di $b$ minori o uguali ad $n$ come $\dfrac{n}{b}$. Così facendo, tuttavia, conteremo due volte eventuali multipli sia di $a$ che di $b$; alla somma dei multipli, pertanto, va rimosso il numero di multipli di $ab$. In numeri:
+\begin{equation}
+\begin{split}
+\varphi(ab) & = n-\left(\frac{n}{a}+\frac{n}{b}-\frac{n}{ab}\right)= \\
+& = n\left(1-\frac{1}{a}\right)-\frac{n}{b}\left(1-\frac{1}{a}\right)=\\
+& = \left(1-\frac{1}{a}\right)\left(n-\frac{n}{b}\right)=\\
+& = n\left(1-\frac{1}{a}\right)\left(1-\frac{1}{b}\right)=\\
+& = a\left(1-\frac{1}{a}\right)b\left(1-\frac{1}{b}\right)=\varphi(a)\varphi(b)
+\end{split}
+\end{equation}
+che, c.v.d., coincide esattamente con la \eqref{phiAB}.
+
+\subsection{Aritmetica Modulare}
+L'aritmetica modulare (detta anche aritmetica \emph{dell'orologio}, in quanto si basa su essa anche il calcolo delle ore a cicli di 12 o 24) trova applicazioni nella crittografia e nella teoria dei numeri ed è alla base di molte delle più comuni operazioni aritmetiche e algebriche.\\
+Si tratta di un sistema di aritmetica degli interi in cui i numeri "si avvolgono su loro stessi" ogni volta che raggiungono i multipli di un determinato numero $n$, detto \textbf{modulo}. L'aritmetica modulare e la notazione usuale delle congruenze vennero formalmente introdotte da Gauss nelle sue \emph{Disquisitiones Arithmeticae} del 1801.\\\\
+Possiamo definire in $\mathbb{Z}$ la relazione $\equiv_n$ come:
+\begin{equation} \label{definizioneModulo}
+    y \equiv_{n} x \Longleftrightarrow \exists \, k \in \mathbb{Z} : y = x + k n
+\end{equation}
+Osserviamo che la relazione $\equiv_n$ gode rispettivamente di proprietà riflessiva, simmetrica e transitiva; pertanto, ricordando il paragrafo (\ref{Relazi}), possiamo asserire che si tratta a tutti gli effetti di una relazione di equivalenza.\\
+Ricordando le proprietà della divisibilità (\ref{proprietaDiv}), la dimostrazione di ciò è immediata:
+\begin{itemize}
+    \item $a \equiv_n a \text{ (mod $n$) } \implies \, 0 \equiv_n 0 \text{ (mod $n$)} $;\\
+    risulta sempre vera in quanto $(a|0)$ con $a \neq 0$;
+    \item $a \equiv_n b \text{ (mod $n$) } \implies \, b \equiv_n a \text{ (mod $n$)} $;\\
+    risulta sempre vera in quanto $(n|a-b)\, \implies \, (n|-(a-b)) = (n|b-a)$;
+    \item $a \equiv_n b \text{ (mod $n$) } \land \, b \equiv_n c \text{ (mod $n$)}\, \implies \, a \equiv_n c \text{ (mod $n$)}$;\\
+    risulta sempre vera in quanto, per la proprietà distributiva della divisione,  $(n|a-b)\, \implies \, (n|b-c) \, \implies \, (n|a-b+b-c) = (n|a-c)$;
+\end{itemize}
+Estendendo la definizione di divisibilità al caso generale, possiamo scrivere:
+\begin{equation}
+    y=qn+r
+\end{equation}
+Dove $q$ è il quoziente della divisione e $r$ il resto.\\
+Riscrivendola in parallelo con la \eqref{definizioneModulo}:
+\begin{equation} \label{parallelo}
+\begin{split}
+y & = kn+x \\
+y & = qn+r
+\end{split}
+\end{equation}
+Appare dunque evidente come la scrittura $y \equiv x \text{ (mod $n$)}$ significhi che $x$ equivale al resto della divisione di $y$ per $n$.\\
+Una delle peculiarità di questa relazione è che numeri diversi possono essere uguali in modulo, ossia possono avere lo stesso resto quando divisi per un numero $n$. La totalità di questi numeri con egual resto farà parte, ovviamente, della stessa classe di equivalenza $\overline{r}$.\\\\
+Definendo l'insieme $\mathbb{Z}_n$ delle classi di resto modulo $n$ come:
+\begin{equation}\label{Zn}
+\mathbb{Z}_n = \mathbb{Z}/\equiv_n
+\end{equation}
+possiamo evidenziare alcune proprietà immediate:
+\begin{itemize}
+    \item $\mathbb{Z}_n$ è un insieme finito;
+    \item $\mathbb{Z}_n=\{ \overline{0},\overline{1},\hdots,\overline{n-1}\}$;
+\end{itemize}
+Inoltre, è doveroso definire le operazioni di somma, prodotto ed elevamento a potenza delle classi di resto in $\mathbb{Z}_n$.\\
+Riscrivendo la somma in modulo con la definizione \eqref{definizioneModulo} otteniamo:
+\begin{equation}
+\begin{split}
+a \text{ (mod $n$)} + b \text{ (mod $n$)} & = \\
+& = a+jn + b + kn = a+b + (j+k)n =\\
+& = a+b\text{ (mod $n$)}
+\end{split}
+\end{equation}\\
+Analogamente possiamo riscrivere il prodotto in modulo:
+\begin{equation}
+\begin{split}
+a \text{ (mod $n$)} \cdot b \text{ (mod $n$)} & = \\
+& = (a+jn) (b + kn) =\\
+& = ab +akn +bjn +kjn^2=\\
+& = ab + n(ak+bj+kjn)=\\
+& = a\cdot b\text{ (mod $n$)}
+\end{split}
+\end{equation}
+Per l'elevamento a potenza con piccoli esponenti tali che $a^b \leq n$, il calcolo è immediato e non costituisce un particolare problema; è un caso diverso, invece, quello in cui figurano esponenti particolarmente grandi.\\
+\'E possibile ovviare al problema grazie al \textbf{piccolo teorema di Fermat}, che afferma che che se $p$ è un numero primo, allora per ogni intero $a$ vale la relazione:
+\begin{equation}\label{Fermat1}
+    a^p \equiv a \text{ (mod $p$)}
+\end{equation}
+È possibile riscrivere la \eqref{Fermat1} in maniera equivalente: se $a$ è un intero coprimo con $p$, allora:
+\begin{equation}\label{Fermat2}
+    a^{p-1} \equiv 1 \text{ (mod $p$)}
+\end{equation}
+Nel Settecento Eulero generalizzò con la sua \emph{phi} il teorema, che prese il nome di Teorema di Euler-Fermat:
+\begin{equation}\label{EulerFermat}
+    \text{MCD$(a,n)=1$} \, \Longleftrightarrow \, a^{\varphi(n)} \equiv 1 \text{ (mod $n$)}
+\end{equation}\\
+Pertanto conoscendo $n$, $\varphi(n)$ e $a$, con MCD$(a,n)=1$, siamo in grado di abbassare il grado dell'esponente applicando il teorema di Euler-Fermat.\\
+Vediamo un esempio pratico:\\\\
+$\left \{ \begin{array}{lr}
+12^{83} \text{ (mod $41$)}\\
+\varphi(41)=40
+\end{array}
+\right. \Longrightarrow 12^{2 \cdot 40 + 3} \text{ (mod $41$)} \Longrightarrow \left(12^{40}\right)^2\cdot 12^3$ \text{(mod $41$);}\\\\
+Poichè $12^{40} = 1 \text{ (mod $41$)}$ secondo il teorema di Euler-Fermat, allora ne consegue che:
+\begin{equation}
+\begin{split}
+\left(12^{40}\right)^2\cdot 12^3 \text{(mod $41$)} & =\\
+& = 1^2 \cdot 12^3 \text{ (mod $41$)} =\\
+& = 12^3 \text{ (mod $41$)} =\\
+& = 12^2 \cdot 12 \text{ (mod $41$)} =\\
+& = 144 \text{ (mod $41$)} \cdot 12 \text{ (mod $41$)} =\\
+& = 21 \text{ (mod $41$)} \cdot 12 \text{ (mod $41$)} = 242 \text{ (mod $41$)} =\\
+& = 37 \text{ (mod $41$)}
+\end{split}
+\end{equation}\\
+Giunti a questo punto, è legittimo porci un quesito: come si calcola l'inverso in modulo, ammesso che esso esista?\\
+Prima di rispondere a questa domanda, ricordiamo la definizione generale di inverso e invertibilità:
+\begin{quote}
+    \emph{Si definisce inverso di una classe di resto $\overline{x} \in \mathbb{Z}_n$ quella classe di resto $\overline{y}$ tale che $\overline{x} \cdot \overline{y} = \overline{1}$, dove $\overline{y}=\overline{x}^{-1}$.\\
+    Un elemento generico $x$ è invertibile se e solo se esiste un inverso $\in \mathbb{Z}$ che soddisfa questa condizione.}
+\end{quote}
+Riscrivendo la definizione di inverso in modulo $n$ algebricamente possiamo fare alcune osservazioni:
+\begin{equation}
+\begin{split}
+xy+kn=1+ln & \Longrightarrow\\
+& \Longrightarrow xy + (k-l)n = 1;
+\end{split}
+\end{equation}
+Ricordando l'identità di B\'ezout \eqref{Bezout}, poichè 1 è combinazione lineare di $x$ e $n$, corrisponde al loro MCD. Grazie alla \eqref{coprimi} possiamo affermare che pertanto $x$ e $n$ sono primi tra loro. Poichè, sempre grazie a B\'ezout, possiamo dimostrare a ritroso che due numeri coprimi $x$ e $n$ possono essere scritti come $ax+bn=1$ da cui $a \cdot x \equiv 1 \text{ (mod $n$)}$ e che quindi $x$ è invertibile, stabiliamo una coimplicazione certa tra numeri coprimi e invertibili:
+\begin{equation}\label{CoprimiInvertibili}
+\forall x \in \mathbb{Z} \land n \geq 1 \mid \, \overline{x} \in \mathbb{Z}_n \text{\emph{ è invertibile}} \Longleftrightarrow \text{MCD}(x,n)=1
+\end{equation}
+Poichè tutti i coprimi sono invertibili e tutti gli invertibili in modulo $n$ sono coprimi con $n$, possiamo integrare la definizione della $\varphi(n)$ di Eulero come numero di elementi invertibili in $\mathbb{Z}_n$ e dunque coprimi con $n$ minori di esso.\\\\
+Possiamo finalmente rispondere al quesito posto precedentemente: un inverso di $x$ in $\mathbb{Z}_n$ esiste se e solo se $x$ e $n$ sono coprimi. Inoltre, grazie all'algoritmo di Euclide e al calcolo dei coefficienti dell'identità di B\'ezout \eqref{coefficienti}, siamo in grado di determinare quel numero $y$ per cui $xy+kn=1$, trovando di fatto l'inverso della classe di resto $\overline{x}$ in $\mathbb{Z}_n$.\\\\
+Abbiamo adesso tutti gli strumenti matematici necessari per definire le fasi e la struttura del nostro algoritmo RSA.
+
+\newpage
+\section{Struttura dell'algoritmo}
+L'algoritmo RSA è definito a chiave pubblica: significa che ciascun membro di uno scambio di dati possiede una chiave pubblica, ossia nota a tutti, finalizzata alla cifratura del dato da comunicare, e una chiave privata, segreta, necessaria per la decifratura del messaggio stesso.\\
+Le chiavi, come vedremo a breve, sono generate in maniera tale che un messaggio cifrato con una chiave pubblica possa essere decifrato solo con la sua chiave privata \textbf{e viceversa}.\\
+Poichè le chiavi pubbliche sono note a tutti, i messaggi decifrabili con esse garantiscono l'autenticità del mittente in quanto sicuramente cifrate con le loro univoche chiavi private; viceversa, poichè le chiavi private sono segrete, i messaggi cifrati con la chiave pubblica del destinatario possono essere decifrati solo con la sua chiave privata, pertanto esse garantiscono la segretezza del messaggio, che potrà essere decifrato solo dal destinatario.\\\\
+L'algoritmo ha 4 fasi principali:
+\begin{enumerate}
+    \item Generazione delle chiavi: è il passaggio più ``intenso'', in cui vengono effettivamente svolti i calcoli maggiori;
+    \item Distribuzione della chiave pubblica: è un passaggio necessario per distribuire ai membri della comunicazione la chiave di cifratura del messaggio;
+    \item Criptazione: il messaggio da diffondere, grazie alle chiavi generate in precedenza, viene ``criptato'' (dal greco \textkappa \textrho \textupsilon \textpi \texttau \textomikron \textvarsigma, ``nascosto'');
+    \item Decriptazione: il messaggio ricevuto viene interpretato e trasformato, per invertire la cifratura e riportare il contenuto voluto dal mittente;
+\end{enumerate}
+
+\subsection{Generazione delle chiavi}
+La generazione delle chiavi prevede cinque fasi principali:
+\begin{enumerate}
+    \item Si scelgono arbitrariamente due numeri $p$ e $q$, che dovranno rimanere segreti e pertanto non dovranno mai essere comunicati;
+    \item Se ne calcola il prodotto $n=pq$, che sarà di pubblico dominio;
+    \item Si applica la funzione $\varphi$ a $n$: il valore di $\varphi(n)$ dovrà rimanere segreto;
+    \item Si sceglie arbitrariamente un numero $e$ (pubblico) coprimo con $\varphi(n)$ e tale che $1 < e < \varphi(n)$;
+    \item Si determina l'inverso $d$ (privato) di $e$ \text{(mod $\varphi(n)$)}, con i metodi descritti in precedenza nella \eqref{coefficienti}; poichè $e$ ed $n$ soddisfano le condizioni della \eqref{CoprimiInvertibili}, abbiamo la certezza dell'esistenza dell'inverso in modulo $n$.
+\end{enumerate}
+A questo punto si dispone di tutte le informazioni necessarie per la distribuzione delle chiavi.\\
+La chiave pubblica sarà infatti costituita dalla coppia:
+\begin{equation*}
+(n,e)
+\end{equation*}
+mentre la chiave privata dalla coppia:
+\begin{equation*}
+(n,d)
+\end{equation*}
+
+\subsection{Distribuzione della chiave}
+La distribuzione è una fase fondamentale per l'interazione con gli altri membri dello scambio di dati. \'E ad ogni modo utile ricordare che non è necessario distribuire la chiave pubblica con metodi sicuri, proprio in quanto pubblica per definizione. Va ribadita tuttavia l'importanza dell'utilizzo di un metodo che garantisca che il messaggio inviato giunga a destinazione.
+
+\subsection{Criptazione}
+Una volta convertito, con criteri arbitrariamente definiti, il testo del messaggio da trasmettere in un numero $m$ tale che $0 \leq m < n$, si può cifrare con la chiave pubblica del \textbf{destinatario} il messaggio con una semplice elevamento a potenza in modulo:
+\begin{equation}\label{cifratura}
+    c \equiv m^e \text{ (mod $n$)}
+\end{equation}
+Si osserva che l'operazione è possibile in quanto il messaggio $m$ da inviare è noto al mittente per definizione e la coppia di numeri $(n,e)$ è pubblica.
+
+\subsection{Decriptazione}
+Una volta che il destinatario riceve il messaggio cifrato $c$, questi è in grado di decifrarlo grazie alla propria chiave privata $(n,d)$.\\
+Ricordando l'identità di B\'ezout \eqref{Bezout} possiamo scrivere:
+\begin{equation}
+\begin{split}
+1 \equiv ed+k\varphi(n) \text{ (mod $n$)} & \Longrightarrow\\
+& \Longrightarrow m \equiv m^{ed} \cdot m^{k\varphi(n)} \text{ (mod $n$)}
+\end{split}
+\end{equation}
+e, ricordando il teorema di Euler-Fermat \eqref{EulerFermat}, semplifichiamo:
+\begin{equation}
+\begin{split}
+m \equiv m^{ed} \cdot m^{k\varphi(n)} \text{ (mod $n$)} & \Longrightarrow\\
+& \Longrightarrow m \equiv \left(m^{e}\right)^{d} \cdot \left(m^{\varphi(n)}\right)^{k} \text{ (mod $n$)} \Longrightarrow \\
+& \Longrightarrow m \equiv \left(m^{e}\right)^{d} \cdot \left(1\right)^{k} \text{ (mod $n$)} \Longrightarrow \\
+& \Longrightarrow m \equiv \left(c\right)^{d} \text{ (mod $n$)};
+\end{split}
+\end{equation}
+Elevando a potenza con esponente $d$ in modulo $n$ il messaggio cifrato $c$, quindi, otterremo il messaggio di partenza $m$.\\
+L'operazione è possibile in quanto $n$, come già ribadito, è pubblico mentre $d$ è noto al destinatario (e solo a lui).
+
+\newpage
+\section{Conclusioni}
+Matematicamente, la sicurezza dell'algoritmo RSA è garantita dalla difficoltà computazionale della fattorizzazione di numeri molto grandi. Affinchè il sistema rimanga sicuro, $p$ e $q$ devono essere sufficientemente grandi (dell'ordine di almeno 500-600 cifre, in base alla potenza computazionale odierna) da richiedere tempi decisamente troppo lunghi per la fattorizzazione di $n=pq$.
+\begin{center}
+{\renewcommand\arraystretch{1.2}
+\begin{tabular}{| c | c | c |}
+\hline
+cifre di $n$ & test di primalità & fattorizzazione\\
+\hline
+50 & 15 secondi & 4 ore\\
+\hline
+75 & 22 secondi & 104 giorni\\
+\hline
+100 & 40 secondi & 74 anni\\
+\hline
+200 & 10 minuti & $4\cdot 10^{9}$ anni (l'età della Terra!)\\
+\hline
+500 & 3 giorni & $4 \cdot 10^{25}$ anni\\
+\hline
+\end{tabular}}
+\end{center}
+Qualora si riuscisse a risalire a questi due numeri, si potrebbe facilmente calcolare
+\begin{equation*}
+    \varphi(n)=\varphi(pq)=\varphi(p)\cdot\varphi(q)=(p-1)(q-1)
+\end{equation*}
+che, di fatto, è un'operazione impossibile se non si conoscono i due numeri primi di partenza.\\\\
+La necessità di un sistema crittografico volto a mantenere la propria comunicazione segreta nei confronti di terzi indesiderati fu da sempre avvertita sin dai tempi più remoti: uno dei primi esempi famosi di crittografia si trova nel \emph{De Bello Gallico} di Cesare: l’autore racconta del riuscito invio di un messaggio a Cicerone, assediato e sul punto di arrendersi.\\
+Cesare usò una cifratura detta per trasposizione, che consisteva in un alfabeto in chiaro (quello ordinario) e un alfabeto cifrante ottenuto sostituendo ogni lettera dell’alfabeto ordinario con una lettera che lo rimpiazza nel crittogramma. Lo schema:\\\\
+\begin{tabular}{ | c | c | c | c | c | c | c | c | c | c | c | }
+\hline
+alfabeto chiaro & a & b & c & d & e & f & g & h & i & l \\
+\hline
+alfabeto cifrante & D & E & F & G & H & I & L & M & N & O \\
+\hline
+\end{tabular}\\
+\begin{tabular}{ | c | c | c | c | c | c | c | c | c | c | c | c | }
+\hline
+alfabeto chiaro & m & n & o & p & q & r & s & t & u & v & z \\
+\hline
+alfabeto cifrante & P & Q & R & S & T & U & V & Z & A & B & C \\
+\hline
+\end{tabular}\\\\
+ci permette, ad esempio, di scrivere GIULIO CESARE come LNAONR FHVDUH.\\\\
+In questo caso appare evidente che l’alfabeto cifrante non è altro che quello in chiaro traslato a destra di tre posizioni: questa particolare cifratura per trasposizione prese proprio il nome di cifratura di Cesare.\\
+\'E evidente, tuttavia, come questo primo sistema sia facilmente attaccabile: le lettere dell’alfabeto italiano sono 21 e quindi possiamo traslarle al massimo di 20 posizioni: traslando di 21, infatti, torneremmo all’alfabeto chiaro.\\
+Quindi, pur non conoscendo la chiave di cifratura (ovvero non sapendo di quanti posti sono state traslate le lettere), l'ipotetico intercettatore, sospettando di una possibile cifratura per trasposizione, avrebbe bisogno al massimo di 20 tentativi per risalire al messaggio originale!\\\\
+Fu proprio per questo che i crittologi avvertirono da subito la necessità di studiare sistemi più sofisticati e sicuri. Anche perché, accanto alla nascita della \emph{crittologia} (la scienza praticata dai crittologi, che ha lo scopo di ideare nuove tecniche di crittografia) si registra quella della \emph{crittoanalisi}, cioè la scienza
+dell’interpretazione di un messaggio di cui si ignora la chiave.\\
+Mentre i crittologi, da un lato, mettono a punto nuovi sistemi di scrittura segreta, dall’altro i crittoanalisti cercano di individuare i loro punti deboli e carpirne i segreti.\\\\
+Un esempio lampante che mostra le potenziali conseguenze della crittoanalisi è costituito da un aneddoto molto interessante riguardante Mary Stuart di Scozia, le cui sorti dipesero completamente dallo scontro tra i suoi cifratori e i decrittatori della cugina, Elisabetta I.\\
+La regina di Scozia, imprigionata da Elisabetta nel 1568, rimase prigioniera per 18 anni. Nel 1586 fu organizzato un piano per liberarla e contemporaneamente uccidere la regina Elisabetta. I cospiratori ritenevano, però, che il loro piano avrebbe dovuto avere l’approvazione di Maria.Per comunicare con lei, e ottenere il suo benestare, si servirono di messaggi cifrati che venivano recapitati in prigione da un messaggero.\\\\
+Uno dei cospiratori fece il doppio gioco, ma fu fatale alla regina di Scozia e ai suoi sudditi l’errata convinzione dell'inattaccabilità del loro sistema crittografico.\\
+I crittoanalisti di Elisabetta permisero alla sovrana di smascherare il piano, evitare che la congiura fosse portata a termine e impossessarsi di prove schiaccianti sul coinvolgimento della cugina nella cospirazione. Mary Stuart, dunque, fu così condannata a morte.\\
+Un sistema crittografico sicuro, quindi, può salvarti la vita!
+\begin{thebibliography}{99}
+\bibitem{Chiellini-Giannarelli} A. Chiellini - R. Giannarelli, \emph{L'esame orale di Matematica nei concorsi a cattedre di scuole secondarie}, Eredi Virgilio Veschi, Roma, 1955.
+\bibitem{Cossu} D. Cossu, \emph{RSA: Dalla teoria alla pratica}, Università degli Studi di Torino, 2020.
+%\bibitem{Wagon} S. Wagon, \emph{Guida a Mathematica}, McGraw-Hill Libri Italia, Milano, 1995.%
+\bibitem{Alberti} G. Alberti, \emph{Aritmetica finita e crittografia a chiave pubblica}, Università degli Studi di Firenze, Firenze, 2004.
+\bibitem{Weil} A. Weil, \emph{Teoria dei Numeri}, Einaudi, Torino, 1993.
+\bibitem{TorVergata} M. Tuzzolo - F. Tovena, \emph{Numeri primi e crittografia}, Università degli Studi di Roma Tor Vergata, Roma, 2008.
+\end{thebibliography}
+
+\end{document} 
