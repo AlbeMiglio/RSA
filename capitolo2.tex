@@ -1,0 +1,15 @@
+\section{Struttura dell'algoritmo}
+L'algoritmo RSA è definito a chiave pubblica: significa che ciascun membro di uno scambio di dati possiede una chiave pubblica, ossia nota a tutti, finalizzata alla cifratura del dato da comunicare, e una chiave privata, segreta, necessaria per la decifratura del messaggio stesso.\\
+Le chiavi, come vedremo a breve, sono generate in maniera tale che un messaggio cifrato con una chiave pubblica possa essere decifrato solo con la sua chiave privata \textbf{e viceversa}.\\
+Poichè le chiavi pubbliche sono note a tutti, i messaggi decifrabili con esse garantiscono l'autenticità del mittente in quanto sicuramente cifrate con le loro univoche chiavi private; viceversa, poichè le chiavi private sono segrete, i messaggi cifrati con la chiave pubblica del destinatario possono essere decifrati solo con la sua chiave privata, pertanto esse garantiscono la segretezza del messaggio, che potrà essere decifrato solo dal destinatario.\\\\
+L'algoritmo ha 4 fasi principali:
+\begin{enumerate}
+    \item Generazione delle chiavi: è il passaggio più ``intenso'', in cui vengono effettivamente svolti i calcoli maggiori;
+    \item Distribuzione della chiave pubblica: è un passaggio necessario per distribuire ai membri della comunicazione la chiave di cifratura del messaggio;
+    \item Criptazione: il messaggio da diffondere, grazie alle chiavi generate in precedenza, viene ``criptato'' (dal greco \textkappa \textrho \textupsilon \textpi \texttau \textomikron \textvarsigma, ``nascosto'');
+    \item Decriptazione: il messaggio ricevuto viene interpretato e trasformato, per invertire la cifratura e riportare il contenuto voluto dal mittente;
+\end{enumerate}
+\input{Algoritmo/generazione}
+\input{Algoritmo/distribuzione}
+\input{Algoritmo/criptazione}
+\input{Algoritmo/decriptazione}

@@ -1,0 +1,110 @@
+\subsection{Aritmetica Modulare}
+L'aritmetica modulare (detta anche aritmetica \emph{dell'orologio}, in quanto si basa su essa anche il calcolo delle ore a cicli di 12 o 24) trova applicazioni nella crittografia e nella teoria dei numeri ed è alla base di molte delle più comuni operazioni aritmetiche e algebriche.\\
+Si tratta di un sistema di aritmetica degli interi in cui i numeri ``si avvolgono su loro stessi'' ogni volta che raggiungono i multipli di un determinato numero $n$, detto \textbf{modulo}. L'aritmetica modulare e la notazione usuale delle congruenze vennero formalmente introdotte da Gauss nelle sue \emph{Disquisitiones Arithmeticae} del 1801.\\\\
+Possiamo definire in $\mathbb{Z}$ la relazione $\equiv$ (mod $n$) come:
+\begin{equation} \label{definizioneModulo}
+    y \equiv x  \text{ (mod $n$) } \Longleftrightarrow \exists \, k \in \mathbb{Z} : y = x + k n
+\end{equation}
+Osserviamo come tale relazione goda rispettivamente di proprietà riflessiva, simmetrica e transitiva; pertanto, ricordando il paragrafo (\ref{Relazi}), possiamo asserire che si tratta a tutti gli effetti di una relazione di equivalenza.\\
+Ricordando le proprietà della divisibilità (\ref{proprietaDiv}), la dimostrazione di ciò è immediata:
+\begin{itemize}
+    \item $a \equiv a \text{ (mod $n$) } \implies \, 0 \equiv a - a \text{ (mod $n$) } \implies \, 0 \equiv 0 \text{ (mod $n$)}$;\\
+    risulta sempre vera in quanto $(a|0)$ con $a \neq 0$;
+    \item $a \equiv b \text{ (mod $n$) } \implies \, b \equiv a \text{ (mod $n$)} $;\\
+    risulta sempre vera in quanto $(n|a-b)\, \implies \, (n|-(a-b)) = (n|b-a)$;
+    \item $a \equiv b \text{ (mod $n$) } \land \, b \equiv c \text{ (mod $n$)}\, \implies \, a \equiv c \text{ (mod $n$)}$;\\
+    risulta sempre vera in quanto, per la proprietà distributiva della divisione,  $(n|a-b)\, \implies \, (n|b-c) \, \implies \, (n|a-b+b-c) = (n|a-c)$;
+\end{itemize}
+Estendendo la definizione di divisibilità al caso generale, possiamo scrivere:
+\begin{equation}
+    y=qn+r
+\end{equation}
+Dove $q$ è il quoziente della divisione e $r$ il resto.\\
+Riscrivendola in parallelo con la \eqref{definizioneModulo}:
+\begin{equation} \label{parallelo}
+\begin{split}
+y & = kn+x \\
+y & = qn+r
+\end{split}
+\end{equation}
+Appare dunque evidente come la scrittura $y \equiv x \text{ (mod $n$)}$ significhi che $x$ equivale al resto della divisione di $y$ per $n$.\\
+Una delle peculiarità di questa relazione è che numeri diversi possono essere uguali in modulo, ossia possono avere lo stesso resto quando divisi per un numero $n$. La totalità di questi numeri con egual resto farà parte, ovviamente, della stessa classe di equivalenza $\overline{r}$.\\\\
+Definendo l'insieme $\mathbb{Z}_n$ delle classi di resto modulo $n$ come:
+\begin{equation}\label{Zn}
+\mathbb{Z}_n = \mathbb{Z}/\equiv \text{(mod $n$)}
+\end{equation}
+possiamo evidenziare alcune proprietà immediate:
+\begin{itemize}
+    \item $\mathbb{Z}_n$ è un insieme finito;
+    \item $\mathbb{Z}_n=\{ \overline{0},\overline{1},\hdots,\overline{n-1}\}$;
+\end{itemize}
+Inoltre, è doveroso definire le operazioni di somma, prodotto ed elevamento a potenza delle classi di resto in $\mathbb{Z}_n$.\\
+Riscrivendo la somma in modulo con la definizione \eqref{definizioneModulo} otteniamo:
+\begin{equation}
+\begin{split}
+a \text{ (mod $n$)} + b \text{ (mod $n$)} & = \\
+& = a+jn + b + kn = a+b + (j+k)n =\\
+& = a+b\text{ (mod $n$)}
+\end{split}
+\end{equation}\\
+Analogamente possiamo riscrivere il prodotto in modulo:
+\begin{equation}
+\begin{split}
+a \text{ (mod $n$)} \cdot b \text{ (mod $n$)} & = \\
+& = (a+jn) (b + kn) =\\
+& = ab +akn +bjn +kjn^2=\\
+& = ab + n(ak+bj+kjn)=\\
+& = a\cdot b\text{ (mod $n$)}
+\end{split}
+\end{equation}
+Per l'elevamento a potenza con piccoli esponenti tali che $a^b \leq n$, il calcolo è immediato e non costituisce un particolare problema; è un caso diverso, invece, quello in cui figurano esponenti particolarmente grandi.\\
+\'E possibile ovviare al problema grazie al \textbf{piccolo teorema di Fermat}, che afferma che che se $p$ è un numero primo, allora per ogni intero $a$ vale la relazione:
+\begin{equation}\label{Fermat1}
+    a^p \equiv a \text{ (mod $p$)}
+\end{equation}
+È possibile riscrivere la \eqref{Fermat1} in maniera equivalente: se $a$ è un intero coprimo con $p$, allora:
+\begin{equation}\label{Fermat2}
+    a^{p-1} \equiv 1 \text{ (mod $p$)}
+\end{equation}
+Nel Settecento Eulero generalizzò con la sua $\varphi$ il teorema, che prese il nome di Teorema di Euler-Fermat:
+\begin{equation}\label{EulerFermat}
+    \text{MCD$(a,n)=1$} \, \Longleftrightarrow \, a^{\varphi(n)} \equiv 1 \text{ (mod $n$)}
+\end{equation}\\
+Pertanto conoscendo $n$, $\varphi(n)$ e $a$, con MCD$(a,n)=1$, siamo in grado di abbassare il grado dell'esponente applicando il teorema di Euler-Fermat.\\
+Vediamo un esempio pratico:\\\\
+$\left \{ \begin{array}{lr}
+12^{83} \text{ (mod $41$)}\\
+\varphi(41)=40
+\end{array}
+\right. \Longrightarrow 12^{2 \cdot 40 + 3} \text{ (mod $41$)} \Longrightarrow \left(12^{40}\right)^2\cdot 12^3$ \text{(mod $41$);}\\\\
+Poichè $12^{40} = 1 \text{ (mod $41$)}$ secondo il teorema di Euler-Fermat, allora ne consegue che:
+\begin{equation}
+\begin{split}
+\left(12^{40}\right)^2\cdot 12^3 \text{(mod $41$)} & =\\
+& = 1^2 \cdot 12^3 \text{ (mod $41$)} =\\
+& = 12^3 \text{ (mod $41$)} =\\
+& = 12^2 \cdot 12 \text{ (mod $41$)} =\\
+& = 144 \text{ (mod $41$)} \cdot 12 \text{ (mod $41$)} =\\
+& = 21 \text{ (mod $41$)} \cdot 12 \text{ (mod $41$)} = 242 \text{ (mod $41$)} =\\
+& = 37 \text{ (mod $41$)}
+\end{split}
+\end{equation}\\
+A questo punto, è lecito chiedersi: come si calcola l'inverso in modulo, ammesso che esso esista?\\
+Prima di rispondere a questa domanda, ricordiamo la definizione generale di inverso e invertibilità:
+\begin{quote}
+    \emph{Si definisce inverso di una classe di resto $\overline{x} \in \mathbb{Z}_n$ quella classe di resto $\overline{y}$ tale che $\overline{x} \cdot \overline{y} = \overline{1}$, dove $\overline{y}=\overline{x}^{-1}$.\\
+    Un elemento generico $x$ è invertibile se e solo se esiste un inverso $\in \mathbb{Z}$ che soddisfa questa condizione.}
+\end{quote}
+Riscrivendo la definizione di inverso in modulo $n$ algebricamente possiamo fare alcune osservazioni:
+\begin{equation}
+\begin{split}
+xy+kn=1+ln & \Longrightarrow\\
+& \Longrightarrow xy + (k-l)n = 1;
+\end{split}
+\end{equation}
+Ricordando l'identità di B\'ezout \eqref{Bezout}, poichè 1 è combinazione lineare di $x$ e $n$, corrisponde al loro MCD. Grazie alla \eqref{coprimi} possiamo affermare che pertanto $x$ e $n$ sono primi tra loro. Poichè, sempre grazie a B\'ezout, possiamo dimostrare a ritroso che due numeri coprimi $x$ e $n$ possono essere scritti come $ax+bn=1$ da cui $a \cdot x \equiv 1 \text{ (mod $n$)}$ e che quindi $x$ è invertibile, stabiliamo una coimplicazione certa tra numeri coprimi e invertibili:
+\begin{equation}\label{CoprimiInvertibili}
+\forall x \in \mathbb{Z} \land n \geq 1 \mid \, \overline{x} \in \mathbb{Z}_n \text{\emph{ è invertibile}} \Longleftrightarrow \text{MCD}(x,n)=1
+\end{equation}
+Poichè tutti i coprimi sono invertibili e tutti gli invertibili in modulo $n$ sono coprimi con $n$, possiamo integrare la definizione della $\varphi(n)$ di Eulero come numero di elementi invertibili in $\mathbb{Z}_n$ e dunque coprimi con $n$ minori di esso.\\\\
+Possiamo finalmente rispondere al quesito posto precedentemente: un inverso di $x$ in $\mathbb{Z}_n$ esiste se e solo se $x$ e $n$ sono coprimi. Inoltre, grazie all'algoritmo di Euclide e al calcolo dei coefficienti dell'identità di B\'ezout \eqref{coefficienti}, siamo in grado di determinare quel numero $y$ per cui $xy+kn=1$, trovando di fatto l'inverso della classe di resto $\overline{x}$ in $\mathbb{Z}_n$.\\\\

@@ -1,0 +1,20 @@
+\subsection{Decriptazione}
+Una volta che il destinatario riceve il messaggio cifrato $c$, questi è in grado di decifrarlo grazie alla propria chiave privata $(n,d)$.\\
+Ricordando l'identità di B\'ezout \eqref{Bezout} possiamo scrivere:
+\begin{equation}
+\begin{split}
+1 \equiv ed+k\varphi(n) \text{ (mod $n$)} & \Longrightarrow\\
+& \Longrightarrow m \equiv m^{ed} \cdot m^{k\varphi(n)} \text{ (mod $n$)}
+\end{split}
+\end{equation}
+e, ricordando il teorema di Euler-Fermat \eqref{EulerFermat}, semplifichiamo:
+\begin{equation}
+\begin{split}
+m \equiv m^{ed} \cdot m^{k\varphi(n)} \text{ (mod $n$)} & \Longrightarrow\\
+& \Longrightarrow m \equiv \left(m^{e}\right)^{d} \cdot \left(m^{\varphi(n)}\right)^{k} \text{ (mod $n$)} \Longrightarrow \\
+& \Longrightarrow m \equiv \left(m^{e}\right)^{d} \cdot \left(1\right)^{k} \text{ (mod $n$)} \Longrightarrow \\
+& \Longrightarrow m \equiv \left(c\right)^{d} \text{ (mod $n$)};
+\end{split}
+\end{equation}
+Elevando a potenza con esponente $d$ in modulo $n$ il messaggio cifrato $c$, quindi, otterremo il messaggio di partenza $m$.\\
+L'operazione è possibile in quanto $n$, come già ribadito, è pubblico mentre $d$ è noto al destinatario (e solo a lui).

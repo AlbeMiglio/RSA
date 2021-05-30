@@ -1,0 +1,18 @@
+\subsection{Generazione delle chiavi}
+La generazione delle chiavi prevede cinque fasi principali:
+\begin{enumerate}
+    \item Si scelgono arbitrariamente due numeri $p$ e $q$, che dovranno rimanere segreti e pertanto non dovranno mai essere comunicati;
+    \item Se ne calcola il prodotto $n=pq$, che sarà di pubblico dominio;
+    \item Si applica la funzione $\varphi$ a $n$: il valore di $\varphi(n)$ dovrà rimanere segreto;
+    \item Si sceglie arbitrariamente un numero $e$ (pubblico) coprimo con $\varphi(n)$ e tale che $1 < e < \varphi(n)$;
+    \item Si determina l'inverso $d$ (privato) di $e$ \text{(mod $\varphi(n)$)}, con i metodi descritti in precedenza nella \eqref{coefficienti}; poichè $e$ ed $n$ soddisfano le condizioni della \eqref{CoprimiInvertibili}, abbiamo la certezza dell'esistenza dell'inverso in modulo $n$.
+\end{enumerate}
+A questo punto si dispone di tutte le informazioni necessarie per la distribuzione delle chiavi.\\
+La chiave pubblica sarà infatti costituita dalla coppia:
+\begin{equation*}
+(n,e)
+\end{equation*}
+mentre la chiave privata dalla coppia:
+\begin{equation*}
+(n,d)
+\end{equation*}

@@ -1,0 +1,35 @@
+\subsection{Funzione di Eulero}
+\'E detta funzione toziente di Eulero, \textbf{indicatore di Gauss} o funzione di Euler-Gauss quella funzione che associa ad ogni $n \in \mathbb{N}\backslash \{0\}$ il numero dei coprimi con $n$ minori di esso.
+\begin{equation}\label{phi}
+\varphi(n)=\bigg|\{k \, |\, 1 \leq k \leq n-1 \, \land \, \text{MCD}(n,k)=1\, \}\bigg|
+\end{equation}
+Per convenzione, $\varphi(1)=1$; rifacendoci alla definizione della funzione, sappiamo che per ogni numero primo $p$:
+\begin{equation}\label{phiP}
+    \varphi(p)=p-1
+\end{equation}
+poichè un numero primo, per definizione, è coprimo con tutti i numeri interi $\in \mathbb{N}$ che lo precedono.\\
+Calcoliamo ora $\varphi(p^\alpha)$, con $p$ numero primo; a tal scopo, osserviamo che i numeri che hanno dei fattori in comune con $p$ devono essere multipli di una sua potenza. Pertanto, di tutti i numeri compresi tra $1$ e $p^\alpha$, solo
+\begin{equation*}
+    p,2p,3p,\hdots,p^{\alpha-1}\cdot p
+\end{equation*}
+non sono coprimi con $p^\alpha$. Quantificandoli, questi ultimi sono in numero di $p^{\alpha-1}$, pertanto sarà certamente:
+\begin{equation}\label{phiPa}
+\varphi(p^\alpha)=p^\alpha-p^{\alpha-1}=p^{\alpha-1}\left(p-1\right)=p^\alpha \left(1-\frac{1}{p}\right)
+\end{equation}
+che, con $\alpha=1$, coincide perfettamente con la \eqref{phiP}.\\\\
+Fatte queste premesse, possiamo dimostrare alcune interessanti proprietà della $\varphi$ di Eulero.\\
+Ad esempio, scopriamo che la $\varphi$ di Eulero è moltiplicativa: per ogni coppia di interi $a$ e $b$ primi tra loro si ha:
+\begin{equation}\label{phiAB}
+\varphi(ab)=\varphi(a)\varphi(b)
+\end{equation}
+Considerando $n=ab$, per trovare i coprimi minori di $n$ occorre sottrarre ad esso i multipli di $a$ e di $b$. I multipli di $a$ minori o uguali ad $n$, cioè $a,2a,3a,\hdots,\dfrac{n}{a}\cdot a$, saranno $\dfrac{n}{a}$; analogamente possiamo quantificare i multipli di $b$ minori o uguali ad $n$ come $\dfrac{n}{b}$. Così facendo, tuttavia, conteremo due volte eventuali multipli sia di $a$ che di $b$; alla somma dei multipli, pertanto, va rimosso il numero di multipli di $ab$. In numeri:
+\begin{equation}
+\begin{split}
+\varphi(ab) & = n-\left(\frac{n}{a}+\frac{n}{b}-\frac{n}{ab}\right)= \\
+& = n\left(1-\frac{1}{a}\right)-\frac{n}{b}\left(1-\frac{1}{a}\right)=\\
+& = \left(1-\frac{1}{a}\right)\left(n-\frac{n}{b}\right)=\\
+& = n\left(1-\frac{1}{a}\right)\left(1-\frac{1}{b}\right)=\\
+& = a\left(1-\frac{1}{a}\right)b\left(1-\frac{1}{b}\right)=\varphi(a)\varphi(b)
+\end{split}
+\end{equation}
+che, c.v.d., coincide esattamente con la \eqref{phiAB}.

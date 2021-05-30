@@ -1,0 +1,59 @@
+\section{Conclusioni}
+Matematicamente, la sicurezza dell'algoritmo RSA è garantita dalla difficoltà computazionale della fattorizzazione di numeri molto grandi. Affinchè il sistema rimanga sicuro, $p$ e $q$ devono essere sufficientemente grandi (dell'ordine di almeno 500-600 cifre, in base alla potenza computazionale odierna) da richiedere tempi decisamente troppo lunghi per la fattorizzazione di $n=pq$.
+\begin{center}
+{\renewcommand\arraystretch{1.2}
+\begin{tabular}{| c | c | c |}
+\hline
+cifre di $n$ & test di primalità & fattorizzazione\\
+\hline
+50 & 15 secondi & 4 ore\\
+\hline
+75 & 22 secondi & 104 giorni\\
+\hline
+100 & 40 secondi & 74 anni\\
+\hline
+200 & 10 minuti & $4\cdot 10^{9}$ anni (l'età della Terra!)\\
+\hline
+500 & 3 giorni & $4 \cdot 10^{25}$ anni\\
+\hline
+\end{tabular}}
+\end{center}
+Qualora si riuscisse a risalire a questi due numeri, si potrebbe facilmente calcolare
+\begin{equation*}
+    \varphi(n)=\varphi(pq)=\varphi(p)\cdot\varphi(q)=(p-1)(q-1)
+\end{equation*}
+che, di fatto, è un'operazione impossibile se non si conoscono i due numeri primi di partenza.\\\\
+La necessità di un sistema crittografico volto a mantenere la propria comunicazione segreta nei confronti di terzi indesiderati fu da sempre avvertita sin dai tempi più remoti: uno dei primi esempi famosi di crittografia si trova nel \emph{De Bello Gallico} di Cesare: l’autore racconta del riuscito invio di un messaggio a Cicerone, assediato e sul punto di arrendersi.\\
+Cesare usò una cifratura detta per trasposizione, che consisteva in un alfabeto in chiaro (quello ordinario) e un alfabeto cifrante ottenuto sostituendo ogni lettera dell’alfabeto ordinario con una lettera che lo rimpiazza nel crittogramma. Lo schema:\\\\
+\begin{tabular}{ | c | c | c | c | c | c | c | c | c | c | c | }
+\hline
+alfabeto chiaro & a & b & c & d & e & f & g & h & i & l \\
+\hline
+alfabeto cifrante & D & E & F & G & H & I & L & M & N & O \\
+\hline
+\end{tabular}\\
+\begin{tabular}{ | c | c | c | c | c | c | c | c | c | c | c | c | }
+\hline
+alfabeto chiaro & m & n & o & p & q & r & s & t & u & v & z \\
+\hline
+alfabeto cifrante & P & Q & R & S & T & U & V & Z & A & B & C \\
+\hline
+\end{tabular}\\\\
+ci permette, ad esempio, di scrivere GIULIO CESARE come LNAONR FHVDUH.\\\\
+In questo caso appare evidente che l’alfabeto cifrante non è altro che quello in chiaro traslato a destra di tre posizioni: questa particolare cifratura per trasposizione prese proprio il nome di cifratura di Cesare.\\
+\'E evidente, tuttavia, come questo primo sistema sia facilmente attaccabile: le lettere dell’alfabeto italiano sono 21 e quindi possiamo traslarle al massimo di 20 posizioni: traslando di 21, infatti, torneremmo all’alfabeto chiaro.\\
+Quindi, pur non conoscendo la chiave di cifratura (ovvero non sapendo di quanti posti sono state traslate le lettere), l'ipotetico intercettatore, sospettando di una possibile cifratura per trasposizione, avrebbe bisogno al massimo di 20 tentativi per risalire al messaggio originale!\\\\
+Fu proprio per questo che i crittologi avvertirono da subito la necessità di studiare sistemi più sofisticati e sicuri. Anche perché, accanto alla nascita della \emph{crittologia} (la scienza praticata dai crittologi, che ha lo scopo di ideare nuove tecniche di crittografia) si registra quella della \emph{crittoanalisi}, cioè la scienza
+dell’interpretazione di un messaggio di cui si ignora la chiave.\\
+Mentre i crittologi, da un lato, mettono a punto nuovi sistemi di scrittura segreta, dall’altro i crittoanalisti cercano di individuare i loro punti deboli e carpirne i segreti.\\\\
+Un esempio lampante che mostra le potenziali conseguenze della crittoanalisi è costituito da un aneddoto molto interessante riguardante Mary Stuart di Scozia, le cui sorti dipesero completamente dallo scontro tra i suoi cifratori e i decrittatori della cugina, Elisabetta I.\\
+La regina di Scozia, imprigionata da Elisabetta nel 1568, rimase prigioniera per 18 anni. Nel 1586 fu organizzato un piano per liberarla e contemporaneamente uccidere la regina Elisabetta. Per comunicare con gli altri cospiratori, si servì di messaggi cifrati che venivano recapitati da un messaggero.\\
+Fu fatale, alla regina di Scozia e ai suoi sudditi, l’errata convinzione dell'inattaccabilità del loro sistema crittografico. I crittoanalisti di Elisabetta infatti permisero alla sovrana di smascherare il piano e Mary Stuart fu condannata a morte.\\\\
+La più celebre delle ``guerre crittografiche'', tuttavia, ha certamente come protagonista \textbf{Enigma}, la grande macchina cifrante inventata da Arthur Sherbius nel 1918 che l'esercito e la marina tedesche utilizzarono durante tutta la II guerra mondiale.\\
+La macchina aveva al suo interno un certo numero di rotori intercambiabili con 26 posizioni a scatto prefissate, indicate con le 26 lettere dell'alfabeto. Le 26 posizioni anteriori erano collegate elettricamente in modo disordinato con quelle posteriori; i tre (o più) rotori erano liberi di ruotare secondo un meccanismo con il quale ad ogni giro completo del primo rotore si aveva uno scatto del secondo e così via.
+La decodifica necessitava della stessa esatta configurazione della macchina codificante, perciò venivano periodicamente inviati ai vari reparti dell'esercito documenti riservati contenenti proprio le configurazioni concordate.\\
+La sua fama, paradossalmente, è dovuta al suo fallimento che ne fa una sorta di Titanic della crittografia. Anche qui, come nel caso di Mary Stuart, la convinzione dei tedeschi di aver adottato un sistema inviolabile li portò al fallimento.\\\\
+Già nel 1932 alcuni matematici polacchi erano riusciti a ricostruire una copia della macchina stessa; furono poi utilizzati vari dispositivi meccanici utili per ricostruire velocemente il messaggio segreto: il ciclometro, i fogli perforati e le bombe crittologiche, usate in seguito anche dagli inglesi.\\
+Il matematico inglese Alan Turing (1912-1954), noto soprattutto come padre dell'informatica teorica per la sua macchina di Turing, ideò nuove e più efficienti bombe crittologiche così che Enigma potesse essere sistematicamente forzato in tempi ancor minori. Nel 1942 si arrivò a decrittare più di 80000 messaggi cifrati tedeschi al mese!\\\\
+L'aver forzato, sin dall'inizio della guerra, Enigma (nonchè altri cifrari tedeschi e giapponesi) fu un fattore di grande importanza per la vittoria degli anglo-americani nella II guerra mondiale.\\
+Questo è solo un altro esempio, tra gli innumerevoli possibili, dell'estrema importanza di un sistema crittografico sicuro e di come questo sia potenzialmente in grado di mutare gli equilibri dei più aspri conflitti mondiali, mutando di fatto le sorti dei più importanti eventi nel globo: la sua è una potentissima \textbf{penna} in grado di incidere indelebilmente sull'eterno \textbf{foglio} della storia.

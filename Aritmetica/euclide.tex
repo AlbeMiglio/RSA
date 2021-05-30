@@ -1,0 +1,24 @@
+\subsection{Algoritmo di Euclide}
+L'algoritmo di Euclide ha la funzione di trovare l'MCD tra due numeri interi. È uno degli algoritmi più antichi conosciuti, in quanto presente negli \emph{Elementi} euclidei; certamente era conosciuto da Eudosso di Cnido intorno al 375 a.C. e persino Aristotele ne ha fatto cenno ne \emph{I topici}.\\
+L'algoritmo è particolarmente efficiente in quanto non richiede la fattorizzazione dei due numeri, la cui lentezza computazionale cresce con un andamento esponenziale.\\
+Euclide originariamente formulò il problema geometricamente, per trovare una "misura" comune per la lunghezza di due segmenti, e il suo algoritmo procedeva sottraendo ripetutamente il più corto dal più lungo.\\\\
+Partendo da due numeri naturali $a$ e $b$, è detto $r_i$ il resto della divisione (di passo $i$-esimo) $a_i \div b_i$ tale che $a_i=q_1\cdot b_i+r_i$. \\
+Secondo il teorema alla base dell'algoritmo:
+\begin{equation}
+    \text{MCD}(a_i,b_i)= \text{MCD}(b_i,r_i)
+\end{equation}
+iterando il calcolo del resto per ciascun passo, si otterrà con un numero $N$ finito di passi l'ultimo resto $r_N$ non nullo che coinciderà con l'MCD$(a,b)$.\\
+Sappiamo che il numero di passi da compiere è certamente finito poichè il resto di una divisione è sempre strettamente minore del divisore, e pertanto i numeri
+$r_i$,$r_{i+1}$,$r_{i+2}$,... formano una sequenza strettamente decrescente di numeri interi positivi, che deve
+prima o poi raggiungere il valore 0.\\\\
+Scrivendo i due numeri $a$ e $b$ come multipli del loro MCD (che per semplicità chiameremo $d$) e la loro divisione:\\\\
+$\left \{ \begin{array}{rl}
+a=d \cdot k_a
+\\b=d \cdot k_b
+\end{array}
+\right. \Rightarrow r=d \cdot k_a - q (d \cdot k_b) \Rightarrow r = d (k_a - q \cdot k_b);$\\\\
+appare evidente come il resto sia anch'esso multiplo di MCD$(a,b)$. Andando a ritroso nell'algoritmo si nota come per ciascun resto $r_n$ valga la relazione $(r_n|r_{n-1})$. Di fatto ciascun resto $r_n > 0$ è dunque multiplo di MCD$(a,b)$ e poichè l'ultimo resto è il minore di tutti, il minore dei multipli di MCD$(a,b)$ sarà proprio l'MCD stesso.
+\begin{equation}
+    a,b \in \mathbb{Z} \,\implies \, \exists \, N\in \mathbb{Z} \mid r_N = \text{MCD}(a,b)
+\end{equation}
+Tenendo nota dei quozienti ottenuti durante lo svolgimento dell'algoritmo, si possono determinare due interi $p$ e $q$ tali che $ap+bq=\text{MCD}(a,b)$. Questo però è noto con il nome di algoritmo di Euclide esteso, la cui applicazione più interessante consiste nel calcolo dei coefficienti dell'identità di B\'ezout.\\

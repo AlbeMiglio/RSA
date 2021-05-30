@@ -1,0 +1,29 @@
+\subsection{Identità di B\'ezout}
+L'identità (o lemma) di Bézout afferma che se $a$ e $b$ sono interi (e non entrambi nulli) e il loro MCD è $d$, allora:
+\begin{equation}\label{Bezout}
+\exists \, x,y \in \mathbb{Z} \, : ax+by=d
+\end{equation}
+Si dice che $d$ è \textbf{combinazione lineare} intera di $a$ e $b$.\\
+Grazie all'algoritmo di Euclide, siamo in grado di trovare con un numero $n$ finito di passi l'ultimo resto non nullo; esso concede, tuttavia, un'altra serie di informazioni essenziale per l'applicazione pratica dell'identità di B\'ezout.\\
+Poichè conosciamo i quozienti di ciascun passo dell'algoritmo, siamo in grado di ricavare la coppia di coefficienti di ciascuno di questi, con evidente interesse per l'ultima (dove $r_n=d=\text{MCD}(a,b)$).
+\begin{equation} \label{resti}
+\begin{split}
+r_1 & = a - q_1 b \\
+r_2 & = b - q_2 r_1 \\
+r_3 & = r_1 - q_3 r_2 \\
+\hspace{-4em}\vdots \\
+r_n & = r_{n-2} - q_n r_{n-1}
+\end{split}
+\end{equation}
+Ponendo $a=(1,0)$ e $b=(0,1)$ (di fatto esprimendo i loro coefficienti unitari) e sostituendo questi valori nella \eqref{resti} otteniamo che:
+\begin{equation} \label{coefficienti}
+\begin{split}
+r_1 & = (1;\, -q_1) \\
+r_2 & = (-q_2;\, 1+q_1 q_2) \\
+r_3 & = (1+q_2 q_3;\, -q_1 -q_3(1+q_1 q_2)) \\
+r_4 & = (-q_2 -q_4(1+q_2 q_3);\, 1+q_1 q_2 -q_4(-q_1 -q_3(1+q_1 q_2))) \\
+\hspace{-4em}\vdots \\
+& \text{... e così via.}
+\end{split}
+\end{equation}
+Dove ciascuna coppia equivale ai coefficienti della combinazione lineare per ciascun passo. Conoscendo il numero $n$ di passi da compiere per l'algoritmo e i rispettivi quozienti, dunque, è possibile ricavare i coefficienti $(x,y)$ dell'identità di B\'ezout dell'$n$-esimo passo.

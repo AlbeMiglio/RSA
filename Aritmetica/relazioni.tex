@@ -1,0 +1,24 @@
+\subsection{Relazioni}\label{Relazi}
+\noindent Un concetto fondamentale per costruire successivamente l'insieme $\mathbb{Z}_n$ è quello di relazione:
+\begin{quote}
+    \emph{Sia $X$ un insieme. Una relazione su $X$ è una corrispondenza $X\to X$, cioè un sottoinsieme $\mathcal{R}$ di $X\times X$.}
+\end{quote}
+
+ \noindent Se ad esempio si prendesse $X=\{a,b,c\}$, una possibile relazione è l'insieme $\mathcal{R}=\{(a,b),\, (b,b),\,(b,c)\}$. Come notazione alternativa e più diffusa si può scrivere anche $a \to b$, $b \to b$ e $b \to c$.\\
+
+\noindent Il concetto di relazione è piuttosto astratto e non immediatamente scontato; il nome ``relazione'' dovrebbe però aiutare a dare l'intuizione per comprendere a pieno che cosa si intenda per $a \to b$.
+
+\noindent Esistono diversi tipi di relazioni con diverse proprietà: \'e di nostro particolare interesse il caso della relazione di \textbf{equivalenza}.\\
+\\Possiamo definire una relazione di equivalenza come tale se e solo se è:
+\begin{itemize}
+\item \textbf{riflessiva}: $\forall x\in X$ $x \to x$
+\item \textbf{simmetrica}: $\forall x,y\in X$ $x \to y \ \implies \ y \to x$
+\item \textbf{transitiva}: $\forall x,y,z\in X$ $x \to y \land y \to z \ \implies \ x \to z$
+\end{itemize}
+È interessante notare come la relazione ``$=$'' sia una relazione di equivalenza. Infatti:
+\begin{itemize}
+    \item se $x=x$ allora è tautologico che $x=x$;
+    \item analogamente, se $x=y$ segue che $y=x$;
+    \item anche la transitività è immediatamente dimostrabile con estrema facilità: $x=y \land y=z \ \implies \ x = z$
+\end{itemize}
+Come è ben deducibile, molte altre relazioni definite tramite il simbolo $=$ sono di equivalenza.

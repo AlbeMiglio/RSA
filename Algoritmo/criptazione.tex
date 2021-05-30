@@ -1,0 +1,6 @@
+\subsection{Criptazione}
+Una volta convertito, con criteri arbitrariamente definiti, il testo del messaggio da trasmettere in un numero $m$ tale che $0 \leq m < n$, si può cifrare con la chiave pubblica del \textbf{destinatario} il messaggio con una semplice elevamento a potenza in modulo:
+\begin{equation}\label{cifratura}
+    c \equiv m^e \text{ (mod $n$)}
+\end{equation}
+Si osserva che l'operazione è possibile in quanto il messaggio $m$ da inviare è noto al mittente per definizione e la coppia di numeri $(n,e)$ è pubblica.

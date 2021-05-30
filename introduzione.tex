@@ -1,0 +1,10 @@
+\section*{Introduzione}
+Esso prende nome dai tre studiosi che lo hanno progettato: Ron \textbf{Rivest}, Adi \textbf{Shamir} e Leonard \textbf{Adleman}. L'algoritmo, pubblicato nel 1977, fu uno dei primi ad implementare un sistema a chiave \textbf{pubblica}.\\
+Nei sistemi di crittografia ``classici'' la chiave utilizzata per la cifratura di un messaggio è la stessa necessaria per decifrare il messaggio stesso. Essa è detta pertanto \textbf{privata} e presenta principalmente due problematiche:
+\begin{enumerate}
+    \item[1.] sia il mittente che il destinatario devono essere a conoscenza della stessa chiave di cifratura/decifratura, che non può essere comunicata direttamente senza il rischio di un'intercettazione;
+    \item[2.] poichè la chiave è univoca, non è possibile verificare l'autenticità del mittente e del messaggio: chiunque ne sia in possesso può decodificare messaggi in ingresso e codificarne altri in uscita.
+\end{enumerate}
+\ \ \ \ L'introduzione di un nuovo sistema \textbf{asimmetrico} offrì per la prima volta un'efficace soluzione per entrambe le problematiche. Ciascun ente comunicante infatti possiede una coppia di chiavi, una privata ed una pubblica, generate in maniera tale che un messaggio cifrato con l'una può essere decifrato solo con l'altra e viceversa.\\
+Cifrando pertanto un messaggio con la propria chiave privata e con la chiave pubblica del destinatario, esso potrà essere decifrato unicamente con la propria chiave pubblica e con la chiave privata del destinatario stesso: poichè le chiavi pubbliche sono di pubblico dominio, al contrario delle chiavi private, si avrà la certezza da un lato dell'\textbf{autenticità} del messaggio del mittente e dall'altro della \textbf{riservatezza} del messaggio per il destinatario.\\\\
+Per comprendere a pieno il processo matematico alla base dell'algoritmo stesso, sono necessarie delle basi di \emph{Teoria dei numeri} o \emph{aritmetica}, in particolare nel ramo modulare: di seguito analizzeremo gli elementi utili alla discussione.

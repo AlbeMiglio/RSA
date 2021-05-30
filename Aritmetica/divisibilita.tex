@@ -1,0 +1,25 @@
+\subsection{Divisibilità e MCD}
+Prima di introdurre la nozione di massimo comune divisore (MCD), dobbiamo studiare i concetti di divisibilità fra interi, cioè conoscere le caratteristiche e le proprietà delle divisioni fra numeri interi.
+\begin{quote}\label{divisioneIntera}
+\emph{Si dice che \textbf{a divide b} o che b è divisibile per a (e si indica con $a|b$) se esiste uno ed un solo intero quoziente q tale che $b=q \cdot a$.}
+\end{quote}
+In simboli si ha:
+\begin{equation}\label{divisibilita}
+\forall a,b,q \in \mathbb{Z} \mid b=q \cdot a \, \implies \, (a|b)
+\end{equation}
+
+Questa relazione di divisibilità gode di alcune interessanti ma semplici proprietà; infatti, per ogni $a,b,c \in \mathbb{Z}$:
+\begin{itemize}\label{proprietaDiv}
+\item $(1|b) \land (b|b)$ (ciascun numero è divisibile per uno e per se stesso);
+\item se $(a|b) \land (b|c)$, allora $(a|c)$;
+\item se $(a|b) \land b\neq 0$, allora $1 \leq |a| \leq |b|$ (il dividendo è sempre maggiore o uguale al divisore);
+\item se $(a|b) \land (b|a)$, allora $a = \pm b$ (due numeri divisibili tra loro sono uguali in valore assoluto);
+\item se $(a|1)$, allora $a = \pm 1$ (1 è divisibile solo per se stesso e il suo opposto);
+\item se $a \neq 0$, allora $(a|0)$ (0 è divisibile per qualsiasi numero tranne che per se stesso);
+\item se $(a|b) \land (a|(b+c))$, allora $(a|c)$.
+\end{itemize}
+
+Fatte tutte le doverose premesse sulla relazione di divisibilità tra due numeri, possiamo dunque definire il massimo comune divisore, o MCD.\\\\
+Il massimo comune divisore di due numeri interi $a$ e $b$ è il numero naturale più grande per il quale possono essere entrambi divisi.\\
+Per indicare un massimo comune divisore, si usa la dicitura MCD$(a,b)$.\\
+\'E evidente che se due numeri $a$ e $b$ sono entrambi uguali a $0$, allora il loro MCD $=0$.
