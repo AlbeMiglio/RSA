@@ -40,8 +40,8 @@
 \maketitle
 \thispagestyle{empty}
 \begin{abstract}
-Al giorno d'oggi la crittografia è ovunque; qualsiasi comunicazione moderna avviene con una qualsiasi forma di sicurezza (crittografica) in più. In questo elaborato si propone una spiegazione, sotto un punto di vista più formale, di uno degli algoritmi più diffusi per la crittografia moderna, l'algoritmo RSA.\\
-La struttura dell'algoritmo RSA è piuttosto semplice dal punto di vista teorico; dal lato pratico, invece, l'algoritmo stesso sfrutta un'operazione matematica molto facile da eseguire direttamente, ma molto difficile da svolgere a ritroso (to \emph{reverse}!). Ad oggi, la potenza di calcolo dei computer moderni non è sufficiente per garantire una capacità computazionale in grado di eseguire l'operazione inversa in tempi utili.
+Al giorno d'oggi la crittografia è ovunque; qualsiasi comunicazione moderna avviene con una qualche forma di sicurezza (crittografica) in più. In questo elaborato si propone una spiegazione, da un punto di vista più formale, di uno degli algoritmi più diffusi per la crittografia moderna, l'algoritmo RSA.\\
+La struttura dell'algoritmo RSA è piuttosto semplice dal punto di vista teorico; dal lato pratico, invece, l'algoritmo stesso sfrutta un'operazione matematica molto facile da eseguire direttamente, ma molto difficile da svolgere a ritroso (to \emph{reverse}!). Ad oggi, la potenza di calcolo dei computer moderni non è sufficiente per eseguire l'operazione inversa in tempi utili.
 \end{abstract}
 \newpage
 \tableofcontents
@@ -53,7 +53,7 @@ Nei sistemi di crittografia ``classici'' la chiave utilizzata per la cifratura d
     \item[1.] sia il mittente che il destinatario devono essere a conoscenza della stessa chiave di cifratura/decifratura, che non può essere comunicata direttamente senza il rischio di un'intercettazione;
     \item[2.] poichè la chiave è univoca, non è possibile verificare l'autenticità del mittente e del messaggio: chiunque ne sia in possesso può decodificare messaggi in ingresso e codificarne altri in uscita.
 \end{enumerate}
-\ \ \ \ L'introduzione di un nuovo sistema \textbf{asimmetrico} portò per la prima volta un'efficace soluzione per entrambe le problematiche. Ciascun ente comunicante infatti possiede una coppia di chiavi, una privata ed una pubblica, generate in maniera tale che un messaggio cifrato con l'una può essere decifrato solo con l'altra e viceversa.\\
+\ \ \ \ L'introduzione di un nuovo sistema \textbf{asimmetrico} offrì per la prima volta un'efficace soluzione per entrambe le problematiche. Ciascun ente comunicante infatti possiede una coppia di chiavi, una privata ed una pubblica, generate in maniera tale che un messaggio cifrato con l'una può essere decifrato solo con l'altra e viceversa.\\
 Cifrando pertanto un messaggio con la propria chiave privata e con la chiave pubblica del destinatario, esso potrà essere decifrato unicamente con la propria chiave pubblica e con la chiave privata del destinatario stesso: poichè le chiavi pubbliche sono di pubblico dominio, al contrario delle chiavi private, si avrà la certezza da un lato dell'\textbf{autenticità} del messaggio del mittente e dall'altro della \textbf{riservatezza} del messaggio per il destinatario.\\\\
 Per comprendere a pieno il processo matematico alla base dell'algoritmo stesso, sono necessarie delle basi di \emph{Teoria dei numeri} o \emph{aritmetica}, in particolare nel ramo modulare: di seguito analizzeremo gli elementi utili alla discussione.
 \newpage
@@ -197,8 +197,8 @@ non sono coprimi con $p^\alpha$. Quantificandoli, questi ultimi sono in numero d
 \varphi(p^\alpha)=p^\alpha-p^{\alpha-1}=p^{\alpha-1}\left(p-1\right)=p^\alpha \left(1-\frac{1}{p}\right)
 \end{equation}
 che, con $\alpha=1$, coincide perfettamente con la \eqref{phiP}.\\\\
-Fatte queste premesse, possiamo dimostrare alcune interessanti proprietà della \emph{phi} di Eulero.\\
-Ad esempio, scopriamo che la \emph{phi} di Eulero è moltiplicativa: per ogni coppia di interi $a$ e $b$ primi tra loro si ha:
+Fatte queste premesse, possiamo dimostrare alcune interessanti proprietà della $\varphi$ di Eulero.\\
+Ad esempio, scopriamo che la $\varphi$ di Eulero è moltiplicativa: per ogni coppia di interi $a$ e $b$ primi tra loro si ha:
 \begin{equation}\label{phiAB}
 \varphi(ab)=\varphi(a)\varphi(b)
 \end{equation}
@@ -216,19 +216,19 @@ che, c.v.d., coincide esattamente con la \eqref{phiAB}.
 
 \subsection{Aritmetica Modulare}
 L'aritmetica modulare (detta anche aritmetica \emph{dell'orologio}, in quanto si basa su essa anche il calcolo delle ore a cicli di 12 o 24) trova applicazioni nella crittografia e nella teoria dei numeri ed è alla base di molte delle più comuni operazioni aritmetiche e algebriche.\\
-Si tratta di un sistema di aritmetica degli interi in cui i numeri "si avvolgono su loro stessi" ogni volta che raggiungono i multipli di un determinato numero $n$, detto \textbf{modulo}. L'aritmetica modulare e la notazione usuale delle congruenze vennero formalmente introdotte da Gauss nelle sue \emph{Disquisitiones Arithmeticae} del 1801.\\\\
-Possiamo definire in $\mathbb{Z}$ la relazione $\equiv_n$ come:
+Si tratta di un sistema di aritmetica degli interi in cui i numeri ``si avvolgono su loro stessi'' ogni volta che raggiungono i multipli di un determinato numero $n$, detto \textbf{modulo}. L'aritmetica modulare e la notazione usuale delle congruenze vennero formalmente introdotte da Gauss nelle sue \emph{Disquisitiones Arithmeticae} del 1801.\\\\
+Possiamo definire in $\mathbb{Z}$ la relazione $\equiv$ (mod $n$) come:
 \begin{equation} \label{definizioneModulo}
-    y \equiv_{n} x \Longleftrightarrow \exists \, k \in \mathbb{Z} : y = x + k n
+    y \equiv x  \text{ (mod $n$) } \Longleftrightarrow \exists \, k \in \mathbb{Z} : y = x + k n
 \end{equation}
-Osserviamo che la relazione $\equiv_n$ gode rispettivamente di proprietà riflessiva, simmetrica e transitiva; pertanto, ricordando il paragrafo (\ref{Relazi}), possiamo asserire che si tratta a tutti gli effetti di una relazione di equivalenza.\\
+Osserviamo come tale relazione goda rispettivamente di proprietà riflessiva, simmetrica e transitiva; pertanto, ricordando il paragrafo (\ref{Relazi}), possiamo asserire che si tratta a tutti gli effetti di una relazione di equivalenza.\\
 Ricordando le proprietà della divisibilità (\ref{proprietaDiv}), la dimostrazione di ciò è immediata:
 \begin{itemize}
-    \item $a \equiv_n a \text{ (mod $n$) } \implies \, 0 \equiv_n 0 \text{ (mod $n$)} $;\\
+    \item $a \equiv a \text{ (mod $n$) } \implies \, 0 \equiv a - a \text{ (mod $n$) } \implies \, 0 \equiv 0 \text{ (mod $n$)}$;\\
     risulta sempre vera in quanto $(a|0)$ con $a \neq 0$;
-    \item $a \equiv_n b \text{ (mod $n$) } \implies \, b \equiv_n a \text{ (mod $n$)} $;\\
+    \item $a \equiv b \text{ (mod $n$) } \implies \, b \equiv a \text{ (mod $n$)} $;\\
     risulta sempre vera in quanto $(n|a-b)\, \implies \, (n|-(a-b)) = (n|b-a)$;
-    \item $a \equiv_n b \text{ (mod $n$) } \land \, b \equiv_n c \text{ (mod $n$)}\, \implies \, a \equiv_n c \text{ (mod $n$)}$;\\
+    \item $a \equiv b \text{ (mod $n$) } \land \, b \equiv c \text{ (mod $n$)}\, \implies \, a \equiv c \text{ (mod $n$)}$;\\
     risulta sempre vera in quanto, per la proprietà distributiva della divisione,  $(n|a-b)\, \implies \, (n|b-c) \, \implies \, (n|a-b+b-c) = (n|a-c)$;
 \end{itemize}
 Estendendo la definizione di divisibilità al caso generale, possiamo scrivere:
@@ -247,7 +247,7 @@ Appare dunque evidente come la scrittura $y \equiv x \text{ (mod $n$)}$ signific
 Una delle peculiarità di questa relazione è che numeri diversi possono essere uguali in modulo, ossia possono avere lo stesso resto quando divisi per un numero $n$. La totalità di questi numeri con egual resto farà parte, ovviamente, della stessa classe di equivalenza $\overline{r}$.\\\\
 Definendo l'insieme $\mathbb{Z}_n$ delle classi di resto modulo $n$ come:
 \begin{equation}\label{Zn}
-\mathbb{Z}_n = \mathbb{Z}/\equiv_n
+\mathbb{Z}_n = \mathbb{Z}/\equiv \text{(mod $n$)}
 \end{equation}
 possiamo evidenziare alcune proprietà immediate:
 \begin{itemize}
@@ -282,7 +282,7 @@ Per l'elevamento a potenza con piccoli esponenti tali che $a^b \leq n$, il calco
 \begin{equation}\label{Fermat2}
     a^{p-1} \equiv 1 \text{ (mod $p$)}
 \end{equation}
-Nel Settecento Eulero generalizzò con la sua \emph{phi} il teorema, che prese il nome di Teorema di Euler-Fermat:
+Nel Settecento Eulero generalizzò con la sua $\varphi$ il teorema, che prese il nome di Teorema di Euler-Fermat:
 \begin{equation}\label{EulerFermat}
     \text{MCD$(a,n)=1$} \, \Longleftrightarrow \, a^{\varphi(n)} \equiv 1 \text{ (mod $n$)}
 \end{equation}\\
@@ -305,7 +305,7 @@ Poichè $12^{40} = 1 \text{ (mod $41$)}$ secondo il teorema di Euler-Fermat, all
 & = 37 \text{ (mod $41$)}
 \end{split}
 \end{equation}\\
-Giunti a questo punto, è legittimo porci un quesito: come si calcola l'inverso in modulo, ammesso che esso esista?\\
+A questo punto, è lecito chiedersi: come si calcola l'inverso in modulo, ammesso che esso esista?\\
 Prima di rispondere a questa domanda, ricordiamo la definizione generale di inverso e invertibilità:
 \begin{quote}
     \emph{Si definisce inverso di una classe di resto $\overline{x} \in \mathbb{Z}_n$ quella classe di resto $\overline{y}$ tale che $\overline{x} \cdot \overline{y} = \overline{1}$, dove $\overline{y}=\overline{x}^{-1}$.\\
@@ -439,16 +439,21 @@ Fu proprio per questo che i crittologi avvertirono da subito la necessità di st
 dell’interpretazione di un messaggio di cui si ignora la chiave.\\
 Mentre i crittologi, da un lato, mettono a punto nuovi sistemi di scrittura segreta, dall’altro i crittoanalisti cercano di individuare i loro punti deboli e carpirne i segreti.\\\\
 Un esempio lampante che mostra le potenziali conseguenze della crittoanalisi è costituito da un aneddoto molto interessante riguardante Mary Stuart di Scozia, le cui sorti dipesero completamente dallo scontro tra i suoi cifratori e i decrittatori della cugina, Elisabetta I.\\
-La regina di Scozia, imprigionata da Elisabetta nel 1568, rimase prigioniera per 18 anni. Nel 1586 fu organizzato un piano per liberarla e contemporaneamente uccidere la regina Elisabetta. I cospiratori ritenevano, però, che il loro piano avrebbe dovuto avere l’approvazione di Maria.Per comunicare con lei, e ottenere il suo benestare, si servirono di messaggi cifrati che venivano recapitati in prigione da un messaggero.\\\\
-Uno dei cospiratori fece il doppio gioco, ma fu fatale alla regina di Scozia e ai suoi sudditi l’errata convinzione dell'inattaccabilità del loro sistema crittografico.\\
-I crittoanalisti di Elisabetta permisero alla sovrana di smascherare il piano, evitare che la congiura fosse portata a termine e impossessarsi di prove schiaccianti sul coinvolgimento della cugina nella cospirazione. Mary Stuart, dunque, fu così condannata a morte.\\
-Un sistema crittografico sicuro, quindi, può salvarti la vita!
+La regina di Scozia, imprigionata da Elisabetta nel 1568, rimase prigioniera per 18 anni. Nel 1586 fu organizzato un piano per liberarla e contemporaneamente uccidere la regina Elisabetta. Per comunicare con gli altri cospiratori, si servì di messaggi cifrati che venivano recapitati da un messaggero.\\
+Fu fatale, alla regina di Scozia e ai suoi sudditi, l’errata convinzione dell'inattaccabilità del loro sistema crittografico. I crittoanalisti di Elisabetta infatti permisero alla sovrana di smascherare il piano e Mary Stuart fu condannata a morte.\\\\
+La più celebre delle ``guerre crittografiche'', tuttavia, ha certamente come protagonista \textbf{Enigma}, la grande macchina cifrante inventata da Arthur Sherbius nel 1918 che l'esercito e la marina tedesche utilizzarono durante tutta la II guerra mondiale.\\
+La macchina aveva al suo interno un certo numero di rotori intercambiabili con 26 posizioni a scatto prefissate, indicate con le 26 lettere dell'alfabeto. Le 26 posizioni anteriori erano collegate elettricamente in modo disordinato con quelle posteriori; i tre (o più) rotori erano liberi di ruotare secondo un meccanismo con il quale ad ogni giro completo del primo rotore si aveva uno scatto del secondo e così via.
+La decodifica necessitava della stessa esatta configurazione della macchina codificante, perciò venivano periodicamente inviati ai vari reparti dell'esercito documenti riservati contenenti proprio le configurazioni concordate.\\
+La sua fama, paradossalmente, è dovuta al suo fallimento che ne fa una sorta di Titanic della crittografia. Anche qui, come nel caso di Mary Stuart, la convinzione dei tedeschi di aver adottato un sistema inviolabile li portò al fallimento.\\\\
+Già nel 1932 alcuni matematici polacchi erano riusciti a ricostruire una copia della macchina stessa; furono poi utilizzati vari dispositivi meccanici utili per ricostruire velocemente il messaggio segreto: il ciclometro, i fogli perforati e le bombe crittologiche, usate in seguito anche dagli inglesi.\\
+Il matematico inglese Alan Turing (1912-1954), noto soprattutto come padre dell'informatica teorica per la sua macchina di Turing, ideò nuove e più efficienti bombe crittologiche così che Enigma potesse essere sistematicamente forzato in tempi ancor minori. Nel 1942 si arrivò a decrittare più di 80000 messaggi cifrati tedeschi al mese!\\\\
+L'aver forzato, sin dall'inizio della guerra, Enigma (nonchè altri cifrari tedeschi e giapponesi) fu un fattore di grande importanza per la vittoria degli anglo-americani nella II guerra mondiale.\\
+Questo è solo un altro esempio, tra gli innumerevoli possibili, dell'estrema importanza di un sistema crittografico sicuro e di come questo sia potenzialmente in grado di mutare gli equilibri dei più aspri conflitti mondiali, mutando di fatto le sorti dei più importanti eventi nel globo: la sua è una potentissima \textbf{penna} in grado di incidere indelebilmente sull'eterno \textbf{foglio} della storia.
 \begin{thebibliography}{99}
 \bibitem{Chiellini-Giannarelli} A. Chiellini - R. Giannarelli, \emph{L'esame orale di Matematica nei concorsi a cattedre di scuole secondarie}, Eredi Virgilio Veschi, Roma, 1955.
 \bibitem{Cossu} D. Cossu, \emph{RSA: Dalla teoria alla pratica}, Università degli Studi di Torino, 2020.
 %\bibitem{Wagon} S. Wagon, \emph{Guida a Mathematica}, McGraw-Hill Libri Italia, Milano, 1995.%
 \bibitem{Alberti} G. Alberti, \emph{Aritmetica finita e crittografia a chiave pubblica}, Università degli Studi di Firenze, Firenze, 2004.
-\bibitem{Weil} A. Weil, \emph{Teoria dei Numeri}, Einaudi, Torino, 1993.
 \bibitem{TorVergata} M. Tuzzolo - F. Tovena, \emph{Numeri primi e crittografia}, Università degli Studi di Roma Tor Vergata, Roma, 2008.
 \end{thebibliography}
 
